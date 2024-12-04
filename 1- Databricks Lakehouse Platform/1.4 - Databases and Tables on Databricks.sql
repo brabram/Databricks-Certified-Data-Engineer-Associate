@@ -14,6 +14,10 @@ VALUES (3 INT, 2 INT, 1 INT)
 
 -- COMMAND ----------
 
+DESCRIBE managed_default
+
+-- COMMAND ----------
+
 DESCRIBE EXTENDED managed_default
 
 -- COMMAND ----------

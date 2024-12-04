@@ -14,11 +14,11 @@ DESCRIBE HISTORY employees
 -- COMMAND ----------
 
 SELECT * 
-FROM employees VERSION AS OF 4
+FROM employees VERSION AS OF 18
 
 -- COMMAND ----------
 
-SELECT * FROM employees@v4
+SELECT * FROM employees@v18
 
 -- COMMAND ----------
 
@@ -30,7 +30,7 @@ SELECT * FROM employees
 
 -- COMMAND ----------
 
-RESTORE TABLE employees TO VERSION AS OF 5
+RESTORE TABLE employees TO VERSION AS OF 18
 
 -- COMMAND ----------
 
@@ -99,7 +99,11 @@ VACUUM employees RETAIN 0 HOURS
 
 -- COMMAND ----------
 
-SELECT * FROM employees@v1
+SELECT * FROM employees@v22
+
+-- COMMAND ----------
+
+DESCRIBE HISTORY employees
 
 -- COMMAND ----------
 
@@ -118,3 +122,7 @@ SELECT * FROM employees
 -- COMMAND ----------
 
 -- MAGIC %fs ls 'dbfs:/user/hive/warehouse/employees'
+
+-- COMMAND ----------
+
+

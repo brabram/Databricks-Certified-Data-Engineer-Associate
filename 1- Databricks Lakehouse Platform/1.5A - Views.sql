@@ -45,6 +45,8 @@ SELECT * FROM view_apple_phones;
 
 SHOW TABLES;
 
+DESCRIBE EXTENDED view_apple_phones
+
 -- COMMAND ----------
 
 -- MAGIC %md
