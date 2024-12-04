@@ -11,13 +11,18 @@
 
 # COMMAND ----------
 
+# MAGIC %sql
+# MAGIC DROP TABLE IF EXISTS author_counts
+
+# COMMAND ----------
+
 # MAGIC %md
 # MAGIC
 # MAGIC ## Reading Stream
 
 # COMMAND ----------
 
-(spark.readStream
+query = (spark.readStream
       .table("books")
       .createOrReplaceTempView("books_streaming_tmp_vw")
 )
@@ -75,9 +80,22 @@
 
 # COMMAND ----------
 
+# MAGIC %sql
+# MAGIC SELECT * FROM author_counts_tmp_vw
+
+# COMMAND ----------
+
+# Lokalizacja punktu kontrolnego
+checkpoint_location = "dbfs:/mnt/demo/author_counts_checkpoint"
+
+# Usunięcie punktu kontrolnego
+dbutils.fs.rm(checkpoint_location, recurse=True)
+
+# COMMAND ----------
+
 (spark.table("author_counts_tmp_vw")                               
       .writeStream  
-      .trigger(processingTime='4 seconds')
+      .trigger(processingTime='40 seconds')
       .outputMode("complete")
       .option("checkpointLocation", "dbfs:/mnt/demo/author_counts_checkpoint")
       .table("author_counts")
@@ -98,9 +116,9 @@
 
 # MAGIC %sql
 # MAGIC INSERT INTO books
-# MAGIC values ("B19", "Introduction to Modeling and Simulation", "Mark W. Spong", "Computer Science", 25),
-# MAGIC         ("B20", "Robot Modeling and Control", "Mark W. Spong", "Computer Science", 30),
-# MAGIC         ("B21", "Turing's Vision: The Birth of Computer Science", "Chris Bernhardt", "Computer Science", 35)
+# MAGIC values ("Bo", "Introduction to Modeling and Simulation", "ong", "Computer Science", 25),
+# MAGIC         ("Ba", "Robot Modeling and Control", "W.", "Computer Science", 30),
+# MAGIC         ("Bad", "Turing's Vision: The Birth of Computer Science", "hard", "Computer Science", 35)
 
 # COMMAND ----------
 
@@ -111,9 +129,14 @@
 
 # MAGIC %sql
 # MAGIC INSERT INTO books
-# MAGIC values ("B16", "Hands-On Deep Learning Algorithms with Python", "Sudharsan Ravichandiran", "Computer Science", 25),
-# MAGIC         ("B17", "Neural Network Methods in Natural Language Processing", "Yoav Goldberg", "Computer Science", 30),
-# MAGIC         ("B18", "Understanding digital signal processing", "Richard Lyons", "Computer Science", 35)
+# MAGIC values ("B106", "Hands-On Deep Learning Algorithms with Python", "xSudharsan Ravichandiran", "Computer Science", 25),
+# MAGIC         ("B107", "Neural Network Methods in Natural Language Processing", "xYoav Goldberg", "Computer Science", 30),
+# MAGIC         ("B018", "Understanding digital signal processing", "xRichard Lyons", "Computer Science", 35)
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC SELECT * FROM author_counts_tmp_vw
 
 # COMMAND ----------
 
@@ -129,5 +152,45 @@
 # COMMAND ----------
 
 # MAGIC %sql
+# MAGIC
+# MAGIC DESCRIBE HISTORY author_counts
+# MAGIC
+
+# COMMAND ----------
+
+# MAGIC %sql
 # MAGIC SELECT *
 # MAGIC FROM author_counts
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC DESCRIBE EXTENDED author_counts
+
+# COMMAND ----------
+
+dbutils.fs.ls("dbfs:/mnt/demo/author_counts_checkpoint")
+
+# COMMAND ----------
+
+files = dbutils.fs.ls("dbfs:/user/hive/warehouse/author_counts")
+
+display(files)
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC DESCRIBE HISTORY author_counts
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC SHOW TABLES
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC INSERT INTO books
+# MAGIC values ("B17306", "Hands-On Deep Learning Algorithms with Python", "xdS6udharsan Ravichandiran", "Computer Science", 25),
+# MAGIC         ("B41507", "Neural Network Methods in Natural Language Processing", "xdYoa6v Goldberg", "Computer Science", 30),
+# MAGIC         ("Bf5018", "Understanding digital signal processing", "xdRichard 6Lyons", "Computer Science", 35)

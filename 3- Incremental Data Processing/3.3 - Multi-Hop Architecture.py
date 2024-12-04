@@ -162,6 +162,11 @@ load_new_data()
 
 # COMMAND ----------
 
+# MAGIC %sql
+# MAGIC SELECT * FROM daily_customer_books_tmp
+
+# COMMAND ----------
+
 (spark.table("daily_customer_books_tmp")
       .writeStream
       .format("delta")

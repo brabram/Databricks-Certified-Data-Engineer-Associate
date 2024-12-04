@@ -21,7 +21,7 @@ GRANT SELECT, MODIFY, READ_METADATA, CREATE ON SCHEMA hive_metastore.hr_db TO hr
 
 GRANT USAGE ON SCHEMA hive_metastore.hr_db TO hr_team;
 
-GRANT SELECT ON VIEW hive_metastore.hr_db.paris_emplyees_vw TO `adam@derar.cloud`;
+GRANT SELECT ON VIEW hive_metastore.hr_db.paris_emplyees_vw TO `bm@bm.cloud`;
 
 SHOW GRANTS ON SCHEMA hive_metastore.hr_db;
 

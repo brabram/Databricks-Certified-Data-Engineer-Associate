@@ -8,7 +8,7 @@ USE CATALOG hive_metastore
 
 -- COMMAND ----------
 
-CREATE TABLE employees
+CREATE OR REPLACE TABLE employees
   (id INT, name STRING, salary DOUBLE);
 
 -- COMMAND ----------
@@ -31,21 +31,21 @@ CREATE TABLE employees
 
 INSERT INTO employees
 VALUES 
-  (1, "Adam", 3500.0),
-  (2, "Sarah", 4020.5);
+  (7, "Adama", 3500.0),
+  (8, "Saraha", 4020.5);
 
 INSERT INTO employees
 VALUES
-  (3, "John", 2999.3),
-  (4, "Thomas", 4000.3);
+  (9, "Johna", 2999.3),
+  (10, "Thomaas", 4000.3);
 
 INSERT INTO employees
 VALUES
-  (5, "Anna", 2500.0);
+  (11, "Annaa", 2500.0);
 
 INSERT INTO employees
 VALUES
-  (6, "Kim", 6200.3)
+  (12, "Kima", 6200.3)
 
 -- NOTE: When executing multiple SQL statements in the same cell, only the last statement's result will be displayed in the cell output.
 
@@ -73,6 +73,11 @@ DESCRIBE DETAIL employees
 
 -- COMMAND ----------
 
+-- MAGIC %python
+-- MAGIC dbutils.fs.ls('dbfs:/user/hive/warehouse/employees')
+
+-- COMMAND ----------
+
 -- MAGIC %md
 -- MAGIC ## Updating Table
 
@@ -84,7 +89,16 @@ WHERE name LIKE "A%"
 
 -- COMMAND ----------
 
+OPTIMIZE employees
+ZORDER BY id
+
+-- COMMAND ----------
+
 SELECT * FROM employees
+
+-- COMMAND ----------
+
+DESCRIBE HISTORY employees
 
 -- COMMAND ----------
 
@@ -113,8 +127,25 @@ DESCRIBE HISTORY employees
 
 -- COMMAND ----------
 
--- MAGIC %fs head 'dbfs:/user/hive/warehouse/employees/_delta_log/00000000000000000005.json'
+-- MAGIC %fs head 'dbfs:/user/hive/warehouse/employees/_delta_log/00000000000000000011.json'
 
 -- COMMAND ----------
 
+-- MAGIC %python
+-- MAGIC spark.conf.set("spark.databricks.delta.retentionDurationCheck.enabled", False)
+-- MAGIC
+-- MAGIC # SET spark.databricks.delta.retentionDurationCheck.enabled = false
 
+-- COMMAND ----------
+
+VACUUM employees RETAIN 0 HOURS
+
+-- COMMAND ----------
+
+-- MAGIC
+-- MAGIC %fs ls 'dbfs:/user/hive/warehouse/employees/_delta_log'
+-- MAGIC
+
+-- COMMAND ----------
+
+-- MAGIC %fs ls 'dbfs:/user/hive/warehouse/employees'
