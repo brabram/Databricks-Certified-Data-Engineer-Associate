@@ -11,6 +11,26 @@
 
 -- COMMAND ----------
 
+
+
+-- COMMAND ----------
+
+DESCRIBE EXTENDED orders
+
+-- COMMAND ----------
+
+DESCRIBE FUNCTION EXTENDED current_catalog
+
+-- COMMAND ----------
+
+ALTER TABLE ORDERS CLUSTER BY (order_id)
+
+-- COMMAND ----------
+
+SELECT current_catalog()
+
+-- COMMAND ----------
+
 SELECT * FROM orders
 
 -- COMMAND ----------
